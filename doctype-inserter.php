@@ -3,7 +3,7 @@
  * Plugin Name: Doctype Inserter
  * Plugin URI: https://github.com/cemfirat/wordpress-doctype-Inserter
  * Description: Adds a simple source-code message or advanced snippet immediately after the HTML doctype.
- * Version: 1.2.3
+ * Version: 1.2.4
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: Cem Firat
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'DOCTYPE_INSERTER_VERSION', '1.2.3' );
+define( 'DOCTYPE_INSERTER_VERSION', '1.2.4' );
 define( 'DOCTYPE_INSERTER_FILE', __FILE__ );
 
 require_once __DIR__ . '/includes/class-doctype-inserter-output.php';
