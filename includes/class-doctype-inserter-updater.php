@@ -17,7 +17,7 @@ final class Doctype_Inserter_Updater {
 		add_filter( 'plugins_api', array( $this, 'plugin_information' ), 10, 3 );
 		add_filter( 'upgrader_source_selection', array( $this, 'preserve_directory' ), 10, 4 );
 		add_action( 'upgrader_process_complete', array( $this, 'clear_cache_after_update' ), 10, 2 );
-		add_action( 'load-update-core.php', array( $this, 'maybe_force_check' ) );
+		add_action( 'load-update-core.php', array( $this, 'maybe_force_check' ), 1 );
 	}
 
 	/** WordPress compares the returned version and controls auto-update preferences. */
@@ -40,10 +40,12 @@ final class Doctype_Inserter_Updater {
 		);
 	}
 
-	/** Allow WordPress's explicit Check Again action to bypass our metadata cache. */
+	/** Make WordPress's explicit Check Again action perform a genuinely fresh plugin check. */
 	public function maybe_force_check() {
 		if ( current_user_can( 'update_plugins' ) && isset( $_GET['force-check'] ) && '1' === $_GET['force-check'] ) {
+			// Run before WordPress's own load-update-core.php update check.
 			delete_site_transient( self::CACHE_KEY );
+			delete_site_transient( 'update_plugins' );
 		}
 	}
 
