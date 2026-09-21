@@ -81,7 +81,7 @@ jobs:
           DI_PACKAGE: ${{ github.workspace }}/dist/doctype-inserter.zip
         run: wp eval-file "$GITHUB_WORKSPACE/tests/wordpress.php" --path="$RUNNER_TEMP/wordpress"
       - name: Verify real front-end HTML, RSS, REST and HEAD responses
-        run: python3 tests/http.py
+        run: python3 tests/frontend.py
 
   release:
     name: Publish stable release
