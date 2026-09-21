@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.2
+
+- Preserve ordinary double hyphens in Simple comment mode.
+- Neutralize only HTML comment delimiter sequences that would make the generated comment non-conforming.
+- Exercise Simple mode, its permissions, upgrade persistence and the output toggle in real WordPress/HTTP integration tests.
+
 ## 1.2.1
 
 - Restore the complete GNU GPL v2 license text in `LICENSE`.
