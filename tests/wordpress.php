@@ -26,10 +26,10 @@ di_assert( $snippet === get_option( 'doctype_inserter_text' ), 'The real Setting
 wp_set_current_user( 1 );
 
 $release = array(
-	'tag_name' => 'v1.2.0', 'draft' => false, 'prerelease' => false,
+	'tag_name' => 'v1.3.0', 'draft' => false, 'prerelease' => false,
 	'body' => "Requires WordPress: 5.8\nRequires PHP: 7.4\nIntegration fixture",
 	'assets' => array( array( 'name' => 'doctype-inserter.zip', 'state' => 'uploaded', 'size' => 100,
-		'browser_download_url' => Doctype_Inserter_Updater::REPOSITORY . '/releases/download/v1.2.0/doctype-inserter.zip' ) ),
+		'browser_download_url' => Doctype_Inserter_Updater::REPOSITORY . '/releases/download/v1.3.0/doctype-inserter.zip' ) ),
 );
 $GLOBALS['di_release'] = $release;
 add_filter( 'pre_http_request', function ( $preempt, $args, $url ) {
@@ -46,7 +46,7 @@ delete_site_transient( 'update_plugins' );
 wp_update_plugins();
 $updates = get_site_transient( 'update_plugins' );
 di_assert( isset( $updates->response[ $basename ] ), 'WordPress discovers a newer GitHub release.' );
-di_assert( '1.2.0' === $updates->response[ $basename ]->new_version, 'WordPress receives the advertised release version.' );
+di_assert( '1.3.0' === $updates->response[ $basename ]->new_version, 'WordPress receives the advertised release version.' );
 di_assert( '5.8' === $updates->response[ $basename ]->requires, 'WordPress receives minimum platform requirements.' );
 
 $GLOBALS['di_release']['tag_name'] = 'v' . DOCTYPE_INSERTER_VERSION;
@@ -61,7 +61,7 @@ di_assert( ! isset( $updates->response[ $basename ] ) && isset( $updates->no_upd
 // The test advertises a newer version but installs the current artifact to verify
 // directory handling, state preservation and package structure without a fake release.
 $updates->response[ $basename ] = (object) array( 'slug' => 'doctype-inserter', 'plugin' => $basename,
-	'new_version' => '1.2.0', 'package' => getenv( 'DI_PACKAGE' ), 'url' => Doctype_Inserter_Updater::REPOSITORY );
+	'new_version' => '1.3.0', 'package' => getenv( 'DI_PACKAGE' ), 'url' => Doctype_Inserter_Updater::REPOSITORY );
 set_site_transient( 'update_plugins', $updates );
 $upgrader = new Plugin_Upgrader( new Automatic_Upgrader_Skin() );
 $result = $upgrader->bulk_upgrade( array( $basename ), array( 'clear_update_cache' => false ) );

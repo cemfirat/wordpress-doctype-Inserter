@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.0
+
+- Add a Simple comment mode that turns plain text into a safe HTML comment after the doctype.
+- Keep existing 1.0/1.1 snippets unchanged and automatically select Advanced mode for upgraded installations.
+- Add a live escaped source preview and optional templates for website credits, hiring and developer greetings.
+- Add an enable/disable switch that pauses output without deleting saved content.
+- Add an on-demand home-page output check to help diagnose page caches and HTML minification.
+- Add project/help links, Cem Firat author metadata, and GPL-2.0-or-later license metadata and file.
+- Keep the bounded streaming output engine and GitHub update behavior from 1.1.
+
 ## 1.1.0
 
 - Use English throughout the settings, plugin metadata, messages and documentation.
