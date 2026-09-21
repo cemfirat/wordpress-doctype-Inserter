@@ -27,8 +27,14 @@ $comment_snippet = "<!--\nHello -- developers -- >\n-->";
 di_assert( 'comment' === get_option( 'doctype_inserter_mode' ), 'WordPress stores Simple comment mode.' );
 di_assert( $comment === get_option( 'doctype_inserter_comment' ), 'WordPress stores the simple comment text.' );
 di_assert( (bool) get_option( 'doctype_inserter_enabled' ), 'WordPress stores the enabled output switch.' );
+di_assert( 'comment' === doctype_inserter_get_mode(), 'The mode resolver selects Simple comment mode.' );
+di_assert( doctype_inserter_is_enabled(), 'The enabled resolver allows output.' );
 di_assert( $comment_snippet === doctype_inserter_comment_snippet( $comment ), 'Simple comment generation preserves valid double hyphens and neutralizes a closing delimiter.' );
-di_assert( $comment_snippet === doctype_inserter_get_active_snippet(), 'Simple mode returns the generated comment as active output.' );
+$active_snippet = doctype_inserter_get_active_snippet();
+if ( $comment_snippet !== $active_snippet ) {
+	throw new RuntimeException( 'Simple mode active output mismatch. Expected ' . var_export( $comment_snippet, true ) . ', got ' . var_export( $active_snippet, true ) );
+}
+WP_CLI::log( 'PASS: Simple mode returns the generated comment as active output.' );
 update_option( 'doctype_inserter_enabled', 0 );
 di_assert( '' === doctype_inserter_get_active_snippet(), 'The output switch disables insertion without deleting the message.' );
 update_option( 'doctype_inserter_enabled', 1 );
