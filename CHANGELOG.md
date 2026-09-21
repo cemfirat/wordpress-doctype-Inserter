@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.4
+
+- Fix the WordPress **Check again** path so the plugin's release metadata cache is cleared before WordPress performs its plugin update check.
+- Clear WordPress's own plugin-update transient on an explicit manual refresh, ensuring a newly published GitHub release is actually fetched immediately.
+
 ## 1.2.3
 
 - Preserve source-like Simple comment text, including HTML-looking examples, percent-encoded URLs, dollar signs, backslashes and line breaks.
