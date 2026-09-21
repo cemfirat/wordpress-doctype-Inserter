@@ -63,6 +63,15 @@ add_filter( 'pre_http_request', function ( $preempt, $args, $url ) {
 	}
 	return $preempt;
 }, 10, 3 );
+$refresh_updater = ( new ReflectionClass( 'Doctype_Inserter_Updater' ) )->newInstanceWithoutConstructor();
+set_site_transient( Doctype_Inserter_Updater::CACHE_KEY, array( 'version' => DOCTYPE_INSERTER_VERSION ), HOUR_IN_SECONDS );
+set_site_transient( 'update_plugins', (object) array( 'last_checked' => time(), 'checked' => array() ), HOUR_IN_SECONDS );
+$_GET['force-check'] = '1';
+$refresh_updater->maybe_force_check();
+unset( $_GET['force-check'] );
+di_assert( false === get_site_transient( Doctype_Inserter_Updater::CACHE_KEY ), 'Check Again clears the plugin release cache.' );
+di_assert( false === get_site_transient( 'update_plugins' ), 'Check Again clears WordPress plugin-update state before a fresh check.' );
+
 delete_site_transient( Doctype_Inserter_Updater::CACHE_KEY );
 delete_site_transient( 'update_plugins' );
 wp_update_plugins();
