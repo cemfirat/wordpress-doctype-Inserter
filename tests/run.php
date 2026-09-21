@@ -30,6 +30,7 @@ function get_option( $key, $default = false ) {
 	return $default;
 }
 function sanitize_textarea_field( $value ) { return trim( str_replace( "\r", '', $value ) ); }
+function wp_check_invalid_utf8( $value ) { return $value; }
 function add_settings_error( ...$args ) { $GLOBALS['errors'][] = $args; }
 function get_site_transient( $key ) { return $GLOBALS['cache']; }
 function set_site_transient( $key, $value, $ttl ) { $GLOBALS['cache'] = $value; $GLOBALS['ttl'] = $ttl; }
@@ -106,6 +107,9 @@ same( true, Doctype_Inserter_Output::is_html_response( array(), 200 ), 'Sniff th
 same( "<!--\nHello -- developers\n-->", doctype_inserter_comment_snippet( 'Hello -- developers' ), 'Simple mode preserves valid double hyphens' );
 same( "<!--\nA <!- - B -- > C -- !>\n-->", doctype_inserter_comment_snippet( 'A <!-- B --> C --!>' ), 'Simple mode neutralizes unsafe comment delimiter sequences' );
 same( '', doctype_inserter_comment_snippet( '' ), 'Empty simple message produces no comment' );
+$plain_comment = "<html data-test=\"source\">100%20 $1 \\path</html>\nsecond line";
+same( $plain_comment, doctype_inserter_validate_comment( $plain_comment ), 'Simple validation preserves source-like text, encoded URLs and line breaks' );
+same( 'ab', doctype_inserter_validate_comment( "a\0b" ), 'Simple validation removes NUL bytes only' );
 same( 'advanced', doctype_inserter_get_mode(), 'Existing legacy snippet defaults to Advanced mode' );
 same( true, doctype_inserter_is_enabled(), 'Existing installations default to enabled' );
 
