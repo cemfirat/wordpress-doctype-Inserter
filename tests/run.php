@@ -17,7 +17,19 @@ function add_action( ...$args ) {}
 function add_filter( ...$args ) {}
 function plugin_basename( $file ) { return basename( dirname( $file ) ) . '/' . basename( $file ); }
 function current_user_can( $cap ) { return ! empty( $GLOBALS['caps'][ $cap ] ); }
-function get_option( ...$args ) { return $GLOBALS['option']; }
+function get_option( $key, $default = false ) {
+	if ( 'doctype_inserter_text' === $key ) {
+		return $GLOBALS['option'];
+	}
+	if ( 'doctype_inserter_mode' === $key || 'doctype_inserter_enabled' === $key ) {
+		return $default;
+	}
+	if ( 'doctype_inserter_comment' === $key ) {
+		return '';
+	}
+	return $default;
+}
+function sanitize_textarea_field( $value ) { return trim( str_replace( "\r", '', $value ) ); }
 function add_settings_error( ...$args ) { $GLOBALS['errors'][] = $args; }
 function get_site_transient( $key ) { return $GLOBALS['cache']; }
 function set_site_transient( $key, $value, $ttl ) { $GLOBALS['cache'] = $value; $GLOBALS['ttl'] = $ttl; }
@@ -90,6 +102,11 @@ foreach ( array( 204, 301, 302, 304 ) as $status ) {
 }
 same( true, Doctype_Inserter_Output::is_html_response( array( 'Content-Type: text/html; charset=UTF-8' ), 404 ), 'Allow HTML error pages' );
 same( true, Doctype_Inserter_Output::is_html_response( array(), 200 ), 'Sniff the leading doctype when no content type is set' );
+
+same( "<!--\nHello - - developers\n-->", doctype_inserter_comment_snippet( 'Hello -- developers' ), 'Simple mode makes double hyphens comment-safe' );
+same( '', doctype_inserter_comment_snippet( '' ), 'Empty simple message produces no comment' );
+same( 'advanced', doctype_inserter_get_mode(), 'Existing legacy snippet defaults to Advanced mode' );
+same( true, doctype_inserter_is_enabled(), 'Existing installations default to enabled' );
 
 same( $snippet, doctype_inserter_validate_snippet( $snippet ), 'Authorized admins retain raw snippets' );
 same( '', doctype_inserter_validate_snippet( '' ), 'An empty snippet disables insertion' );
