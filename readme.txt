@@ -1,46 +1,63 @@
 === Doctype Inserter ===
 Contributors: cemfirat
-Tags: doctype, html, snippet
+Tags: doctype, html, source code, comments, developer
 Requires at least: 5.8
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Insert a custom snippet immediately after the HTML doctype on front-end pages.
+Add simple personal messages or an advanced trusted snippet immediately after the HTML doctype.
 
 == Description ==
 
-Doctype Inserter adds a trusted snippet once, immediately after the document's HTML doctype. Configure it under Settings > Doctype Inserter. Leave the snippet empty to disable insertion.
+Doctype Inserter is a small tool for messages in a WordPress site's page source: website credits, developer greetings, hiring notes, or other short public messages.
 
-The interface, documentation and plugin messages are in English. Existing version 1.0 settings are retained. Editing raw HTML or scripts requires both manage_options and unfiltered_html; on Multisite, normally only a Super Admin has both.
+Version 1.2 includes a Simple comment mode. Write normal text and the plugin wraps it in an HTML comment. Double hyphens are made comment-safe automatically. The settings page includes a source preview, optional templates, an output toggle, and an on-demand home-page output check.
 
-Only HTML documents are changed. Feeds, REST, AJAX, cron, XML-RPC, HEAD requests, robots.txt, favicons, downloads, encoded responses and responses with a fixed Content-Length are skipped. Documents without an HTML doctype in the first 64 KiB are unchanged.
+Existing saved snippets from versions 1.0 and 1.1 automatically remain in Advanced snippet mode and are not rewritten. Advanced raw HTML or JavaScript requires both manage_options and unfiltered_html.
 
-Stable updates are delivered from the public GitHub repository. During WordPress update checks, the plugin requests release metadata from api.github.com. Installation downloads the release ZIP from github.com. No snippet or site content is sent. GitHub receives normal connection data such as the server IP address.
+Only ordinary front-end HTML documents are changed. Feeds, REST, AJAX, cron, XML-RPC, HEAD requests, robots.txt, favicons, downloads, encoded responses and fixed Content-Length responses are skipped.
+
+Stable updates are delivered from the public GitHub repository. Update checks contact api.github.com and package downloads use github.com. No saved message or site content is sent to GitHub.
 
 == Installation ==
 
 1. Download doctype-inserter.zip from the latest GitHub release.
 2. In WordPress, open Plugins > Add New > Upload Plugin and upload the ZIP.
 3. Activate Doctype Inserter and open Settings > Doctype Inserter.
-4. Save a trusted snippet and clear any page/CDN cache.
+4. Write a source-code message and save it.
+5. Clear page/CDN caches if necessary and inspect View Source.
 
-Version 1.0 has no updater. Install 1.1.0 manually once before future releases can appear in WordPress. See README.md for migration instructions for custom folder or single-file installations.
+Version 1.0 has no updater. Install version 1.1.0 or newer manually once before future releases can appear automatically.
 
 == Frequently Asked Questions ==
 
-= How do updates work? =
+= Is the simple message visible on the page? =
 
-Keep the plugin active. WordPress checks stable GitHub releases during its normal plugin update checks. Select Dashboard > Updates > Check Again to refresh manually. Automatic installation is optional and follows the plugin's Enable auto-updates setting. Draft and prerelease versions are ignored.
+No. Simple mode creates an HTML comment. It is public in the HTML response and View Source, but it does not appear in the rendered page layout.
 
-= Can I insert scripts or visible HTML? =
+= What happens to my existing snippet? =
 
-Yes, if WordPress allows you to save unfiltered HTML. This position is before the opening HTML element, so comments are recommended. Other markup can change browser parsing; code intended for the head or body should use those locations instead. PHP is never evaluated.
+It remains unchanged. Existing installations with a saved legacy snippet automatically use Advanced mode until you choose another mode.
+
+= Can I still insert scripts or raw HTML? =
+
+Yes, in Advanced mode when WordPress grants unfiltered_html. Content before the opening HTML element can affect browser parsing, so comments are the recommended use case.
 
 = Why does a saved change not appear? =
 
-Clear page and CDN caches, confirm the page has a leading HTML doctype, and inspect the response source. The plugin does not change non-HTML responses or output that has already been sent.
+Clear page and CDN caches, check HTML minification, then use Check home page output on the settings screen.
 
 == Changelog ==
+
+= 1.2.0 =
+* Add Simple comment mode for plain-text source messages.
+* Preserve existing snippets in Advanced mode.
+* Add live source preview and optional credits, hiring and developer templates.
+* Add an output enable/disable switch without deleting saved content.
+* Add an on-demand home-page output check for cache/minification troubleshooting.
+* Add project/help links, author metadata and GPL-2.0-or-later licensing.
 
 = 1.1.0 =
 * English settings, messages and documentation.
