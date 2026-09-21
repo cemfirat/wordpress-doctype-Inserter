@@ -3,7 +3,7 @@ name: Test and release
 on:
   pull_request:
   push:
-    branches: [main, improve/english-secure-updates]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -70,7 +70,7 @@ jobs:
           python3 scripts/package.py
           wp core download --path="$RUNNER_TEMP/wordpress" --version="$WP_VERSION"
           wp config create --path="$RUNNER_TEMP/wordpress" --dbname=wordpress --dbuser=root --dbpass=wordpress --dbhost=127.0.0.1:3306
-          wp core install --path="$RUNNER_TEMP/wordpress" --url=http://localhost --title=Test --admin_user=admin --admin_password=integration-only --admin_email=test@example.com --skip-email
+          wp core install --path="$RUNNER_TEMP/wordpress" --url=http://127.0.0.1:8080 --title=Test --admin_user=admin --admin_password=integration-only --admin_email=test@example.com --skip-email
           unzip -q dist/doctype-inserter.zip -d "$RUNNER_TEMP/wordpress/wp-content/plugins"
           if [ "$PLUGIN_FOLDER" != wordpress-doctype-Inserter ]; then
             mv "$RUNNER_TEMP/wordpress/wp-content/plugins/wordpress-doctype-Inserter" "$RUNNER_TEMP/wordpress/wp-content/plugins/$PLUGIN_FOLDER"
@@ -80,6 +80,8 @@ jobs:
         env:
           DI_PACKAGE: ${{ github.workspace }}/dist/doctype-inserter.zip
         run: wp eval-file "$GITHUB_WORKSPACE/tests/wordpress.php" --path="$RUNNER_TEMP/wordpress"
+      - name: Verify real front-end HTML, RSS, REST and HEAD responses
+        run: python3 tests/http.py
 
   release:
     name: Publish stable release
