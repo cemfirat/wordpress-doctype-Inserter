@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.3
+
+- Preserve source-like Simple comment text, including HTML-looking examples, percent-encoded URLs, dollar signs, backslashes and line breaks.
+- Validate text encoding and remove NUL bytes instead of using WordPress's generic textarea sanitizer, which strips or rewrites some harmless source-message content.
+- Extend real WordPress and HTTP integration tests to verify exact persistence and output.
+
 ## 1.2.2
 
 - Fix the first switch from a legacy Advanced snippet to Simple comment mode on upgraded installations.

@@ -21,7 +21,7 @@ We're hiring: https://example.com/jobs
 
 The message does not appear in the visible page layout. It is public to anyone who inspects the response or page source.
 
-The settings screen includes a live source preview, templates for credits/hiring/developer greetings, an output toggle, and a home-page output check for spotting cache or minification issues. The preview displays input as text and does not execute it. Simple mode preserves ordinary text such as `--` and only neutralizes sequences that would conflict with HTML comment delimiters.
+The settings screen includes a live source preview, templates for credits/hiring/developer greetings, an output toggle, and a home-page output check for spotting cache or minification issues. The preview displays input as text and does not execute it. Simple mode preserves source-like text such as `<html>`, percent-encoded URLs, dollar signs, backslashes, line breaks and ordinary `--`. It only removes NUL bytes and neutralizes sequences that would conflict with HTML comment delimiters.
 
 ## Backward compatibility
 
