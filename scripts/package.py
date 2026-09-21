@@ -10,6 +10,8 @@ header = (root / 'doctype-inserter.php').read_text()
 version = re.search(r'^ \* Version: (\d+\.\d+\.\d+)$', header, re.M).group(1)
 assert f"define( 'DOCTYPE_INSERTER_VERSION', '{version}' );" in header
 assert f'Stable tag: {version}\n' in (root / 'readme.txt').read_text()
+license_text = (root / 'LICENSE').read_text()
+assert 'GNU GENERAL PUBLIC LICENSE' in license_text and len(license_text) > 10000
 files = ['doctype-inserter.php', 'includes/class-doctype-inserter-output.php',
          'includes/class-doctype-inserter-updater.php', 'readme.txt', 'README.md',
          'CHANGELOG.md', 'LICENSE']
