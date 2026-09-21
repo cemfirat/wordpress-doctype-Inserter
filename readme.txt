@@ -3,7 +3,7 @@ Contributors: cemfirat
 Tags: doctype, html, source code, comments, developer
 Requires at least: 5.8
 Requires PHP: 7.4
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,10 @@ Yes, in Advanced mode when WordPress grants unfiltered_html. Content before the 
 Clear page and CDN caches, check HTML minification, then use Check home page output on the settings screen.
 
 == Changelog ==
+
+= 1.2.4 =
+* Fix WordPress "Check again" so it clears both the GitHub release cache and WordPress plugin-update cache before the core update check runs.
+* Ensure newly published GitHub releases can be discovered immediately on an explicit manual refresh.
 
 = 1.2.3 =
 * Preserve source-like Simple comment text such as HTML-looking examples, percent-encoded URLs, dollar signs, backslashes and line breaks.
