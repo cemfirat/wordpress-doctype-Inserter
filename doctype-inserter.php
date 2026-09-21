@@ -44,7 +44,6 @@ function doctype_inserter_register_settings() {
 		'doctype_inserter_enabled',
 		array(
 			'type'              => 'boolean',
-			'default'           => true,
 			'sanitize_callback' => 'doctype_inserter_validate_enabled',
 			'show_in_rest'      => false,
 		)
@@ -54,7 +53,6 @@ function doctype_inserter_register_settings() {
 		'doctype_inserter_mode',
 		array(
 			'type'              => 'string',
-			'default'           => 'comment',
 			'sanitize_callback' => 'doctype_inserter_validate_mode',
 			'show_in_rest'      => false,
 		)
