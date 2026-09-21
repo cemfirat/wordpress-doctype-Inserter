@@ -3,7 +3,7 @@
  * Plugin Name: Doctype Inserter
  * Plugin URI: https://github.com/cemfirat/wordpress-doctype-Inserter
  * Description: Adds a simple source-code message or advanced snippet immediately after the HTML doctype.
- * Version: 1.2.2
+ * Version: 1.2.3
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: Cem Firat
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'DOCTYPE_INSERTER_VERSION', '1.2.2' );
+define( 'DOCTYPE_INSERTER_VERSION', '1.2.3' );
 define( 'DOCTYPE_INSERTER_FILE', __FILE__ );
 
 require_once __DIR__ . '/includes/class-doctype-inserter-output.php';
@@ -94,13 +94,19 @@ function doctype_inserter_validate_mode( $value ) {
 	return 'advanced' === $value ? 'advanced' : 'comment';
 }
 
-/** Store simple messages as plain textarea text. */
+/** Preserve simple-message text while rejecting invalid input and NUL bytes. */
 function doctype_inserter_validate_comment( $value ) {
 	if ( ! current_user_can( 'manage_options' ) || ! is_string( $value ) ) {
 		$previous = get_option( 'doctype_inserter_comment', '' );
 		return is_string( $previous ) ? $previous : '';
 	}
-	return sanitize_textarea_field( $value );
+	$checked = wp_check_invalid_utf8( $value );
+	if ( '' === $checked && '' !== $value ) {
+		add_settings_error( 'doctype_inserter_comment', 'doctype_inserter_invalid_comment', 'The simple message was not saved because it contains invalid text encoding.' );
+		$previous = get_option( 'doctype_inserter_comment', '' );
+		return is_string( $previous ) ? $previous : '';
+	}
+	return str_replace( "\0", '', $checked );
 }
 
 /** Validate access and type without corrupting intentionally supplied HTML or JavaScript. */
@@ -207,7 +213,7 @@ function doctype_inserter_settings_page() {
 					<th scope="row"><label for="doctype_inserter_comment">Message</label></th>
 					<td>
 						<textarea id="doctype_inserter_comment" name="doctype_inserter_comment" rows="7" class="large-text" placeholder="Hello, developers!"><?php echo esc_textarea( $comment ); ?></textarea>
-						<p class="description">Write normal text. Doctype Inserter wraps it in a safe HTML comment and neutralizes unsafe comment delimiter sequences automatically.</p>
+						<p class="description">Write normal text. Simple mode preserves source-like text and encoded URLs, then neutralizes unsafe HTML comment delimiter sequences automatically.</p>
 						<p>
 							<button type="button" class="button doctype-inserter-template" data-template="Website by Your Name — https://example.com">Website credits</button>
 							<button type="button" class="button doctype-inserter-template" data-template="We're hiring! See our open roles: https://example.com/jobs">We're hiring</button>
