@@ -149,15 +149,15 @@ ob_end_flush();
 same( "<!DOCTYPE html>\n0<html>hello</html>", ob_get_clean(), 'Actual PHP output buffering inserts the snippet' );
 
 $release = array(
-	'tag_name' => 'v1.2.0', 'draft' => false, 'prerelease' => false,
+	'tag_name' => 'v1.3.0', 'draft' => false, 'prerelease' => false,
 	'body' => "Requires WordPress: 5.8\nRequires PHP: 7.4\n<script>unsafe</script>",
 	'assets' => array( array( 'name' => 'doctype-inserter.zip', 'state' => 'uploaded', 'size' => 100,
-		'browser_download_url' => Doctype_Inserter_Updater::REPOSITORY . '/releases/download/v1.2.0/doctype-inserter.zip' ) ),
+		'browser_download_url' => Doctype_Inserter_Updater::REPOSITORY . '/releases/download/v1.3.0/doctype-inserter.zip' ) ),
 );
 $parsed = Doctype_Inserter_Updater::parse_release( $release );
-same( '1.2.0', $parsed['version'], 'Parse stable version' );
+same( '1.3.0', $parsed['version'], 'Parse stable version' );
 same( '7.4', $parsed['requires_php'], 'Read release-specific requirements' );
-foreach ( array( 'v1.2.0-beta', 'v1.2', '../1.2.0', '1.2.0', '' ) as $tag ) {
+foreach ( array( 'v1.2.0-beta', 'v1.2', '../1.2.0', '1.3.0', '' ) as $tag ) {
 	$bad = $release; $bad['tag_name'] = $tag;
 	same( false, Doctype_Inserter_Updater::parse_release( $bad ), 'Reject unstable or malformed tag' );
 }
@@ -168,7 +168,7 @@ foreach ( array( 'draft', 'prerelease' ) as $flag ) {
 foreach ( array( null, array(), array( 'tag_name' => array() ) ) as $bad ) {
 	same( false, Doctype_Inserter_Updater::parse_release( $bad ), 'Ignore malformed JSON structures' );
 }
-foreach ( array( 'https://evil.test/plugin.zip', 'http://github.com/cemfirat/wordpress-doctype-Inserter/releases/download/v1.2.0/doctype-inserter.zip' ) as $url ) {
+foreach ( array( 'https://evil.test/plugin.zip', 'http://github.com/cemfirat/wordpress-doctype-Inserter/releases/download/v1.3.0/doctype-inserter.zip' ) as $url ) {
 	$bad = $release; $bad['assets'][0]['browser_download_url'] = $url;
 	same( false, Doctype_Inserter_Updater::parse_release( $bad ), 'Reject unexpected package URLs' );
 }
@@ -183,7 +183,7 @@ $updater = new Doctype_Inserter_Updater( '/plugins/custom-folder/doctype-inserte
 same( 'other', $updater->check_update( 'other', array(), 'other/plugin.php' ), 'Do not change other GitHub plugins' );
 same( 0, $GLOBALS['requests'], 'Do not contact GitHub for another plugin' );
 $update = $updater->check_update( false, array(), 'custom-folder/doctype-inserter.php' );
-same( '1.2.0', $update['version'], 'Offer newer stable release' );
+same( '1.3.0', $update['version'], 'Offer newer stable release' );
 same( false, array_key_exists( 'autoupdate', $update ), 'Respect WordPress auto-update preference' );
 $updater->get_release();
 same( 1, $GLOBALS['requests'], 'Reuse successful response cache' );
