@@ -3,7 +3,7 @@ Contributors: cemfirat
 Tags: doctype, html, source code, comments, developer
 Requires at least: 5.8
 Requires PHP: 7.4
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +13,7 @@ Add simple personal messages or an advanced trusted snippet immediately after th
 
 Doctype Inserter is a small tool for messages in a WordPress site's page source: website credits, developer greetings, hiring notes, or other short public messages.
 
-Version 1.2 includes a Simple comment mode. Write normal text and the plugin wraps it in an HTML comment. Ordinary double hyphens are preserved; sequences that conflict with HTML comment delimiters are neutralized automatically. The settings page includes a source preview, optional templates, an output toggle, and an on-demand home-page output check.
+Version 1.2 includes a Simple comment mode. Write normal text and the plugin wraps it in an HTML comment. Source-like text, encoded URLs and ordinary double hyphens are preserved; sequences that conflict with HTML comment delimiters are neutralized automatically. The settings page includes a source preview, optional templates, an output toggle, and an on-demand home-page output check.
 
 Existing saved snippets from versions 1.0 and 1.1 automatically remain in Advanced snippet mode and are not rewritten. Advanced raw HTML or JavaScript requires both manage_options and unfiltered_html.
 
@@ -50,6 +50,11 @@ Yes, in Advanced mode when WordPress grants unfiltered_html. Content before the 
 Clear page and CDN caches, check HTML minification, then use Check home page output on the settings screen.
 
 == Changelog ==
+
+= 1.2.3 =
+* Preserve source-like Simple comment text such as HTML-looking examples, percent-encoded URLs, dollar signs, backslashes and line breaks.
+* Validate text encoding and remove NUL bytes without stripping otherwise harmless content.
+* Extend WordPress and real HTTP tests for exact Simple comment persistence and output.
 
 = 1.2.2 =
 * Fix the first switch from a legacy Advanced snippet to Simple comment mode.
