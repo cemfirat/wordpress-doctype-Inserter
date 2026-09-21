@@ -3,7 +3,7 @@ Contributors: cemfirat
 Tags: doctype, html, source code, comments, developer
 Requires at least: 5.8
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,10 @@ Yes, in Advanced mode when WordPress grants unfiltered_html. Content before the 
 Clear page and CDN caches, check HTML minification, then use Check home page output on the settings screen.
 
 == Changelog ==
+
+= 1.2.1 =
+* Restore the complete GNU GPL v2 license text in the packaged LICENSE file.
+* Add a packaging guard so an empty or truncated license cannot be released again.
 
 = 1.2.0 =
 * Add Simple comment mode for plain-text source messages.
