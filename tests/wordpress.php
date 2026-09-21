@@ -19,13 +19,13 @@ $snippet = '<!-- existing $1 \\1 -->';
 update_option( 'doctype_inserter_text', $snippet );
 di_assert( $snippet === get_option( 'doctype_inserter_text' ), 'A trusted administrator can save literal snippets.' );
 
-$comment = 'Hello -- developers -->';
+$comment = 'Hello <html> -- developers %20 $1 \\path -->';
 update_option( 'doctype_inserter_mode', 'comment' );
 update_option( 'doctype_inserter_comment', $comment );
 update_option( 'doctype_inserter_enabled', 1 );
-$comment_snippet = "<!--\nHello -- developers -- >\n-->";
+$comment_snippet = "<!--\n" . 'Hello <html> -- developers %20 $1 \\path -- >' . "\n-->";
 di_assert( 'comment' === get_option( 'doctype_inserter_mode' ), 'WordPress stores Simple comment mode.' );
-di_assert( $comment === get_option( 'doctype_inserter_comment' ), 'WordPress stores the simple comment text.' );
+di_assert( $comment === get_option( 'doctype_inserter_comment' ), 'WordPress preserves source-like Simple comment text exactly.' );
 di_assert( (bool) get_option( 'doctype_inserter_enabled' ), 'WordPress stores the enabled output switch.' );
 di_assert( 'comment' === doctype_inserter_get_mode(), 'The mode resolver selects Simple comment mode.' );
 di_assert( doctype_inserter_is_enabled(), 'The enabled resolver allows output.' );
