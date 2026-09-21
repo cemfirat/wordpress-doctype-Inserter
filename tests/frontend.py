@@ -10,7 +10,7 @@ import urllib.request
 
 root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'wordpress'
 base = 'http://127.0.0.1:8080/'
-snippet = '<!--\nHello -- developers -- >\n-->'
+snippet = '<!--\nHello <html> -- developers %20 $1 \\path -- >\n-->'
 log_path = pathlib.Path(os.environ['RUNNER_TEMP']) / 'doctype-inserter-http.log'
 with log_path.open('w') as log:
     server = subprocess.Popen(['php', '-S', '127.0.0.1:8080', '-t', str(root)], stdout=log, stderr=log)
@@ -29,7 +29,7 @@ with log_path.open('w') as log:
         assert 'text/html' in headers['Content-Type']
         assert re.search(r'<!doctype\s+html[^>]*>\n' + re.escape(snippet), html, re.I), html[:1000]
         assert html.count(snippet) == 1
-        print('PASS: Real theme output contains the normalized simple comment once after the doctype.')
+        print('PASS: Real theme output preserves source-like Simple comment text and neutralizes only the closing delimiter.')
         subprocess.run(['wp', 'option', 'update', 'doctype_inserter_enabled', '0', f'--path={root}'], check=True, stdout=subprocess.DEVNULL)
         _, disabled = fetch()
         assert snippet not in disabled
