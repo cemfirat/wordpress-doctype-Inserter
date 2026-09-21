@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1
+
+- Restore the complete GNU GPL v2 license text in `LICENSE`.
+- Add a packaging guard so an empty or truncated license cannot be shipped again.
+- No runtime behavior changes from 1.2.0.
+
 ## 1.2.0
 
 - Add a Simple comment mode that turns plain text into a safe HTML comment after the doctype.
