@@ -2,6 +2,7 @@
 
 ## 1.2.2
 
+- Fix the first switch from a legacy Advanced snippet to Simple comment mode on upgraded installations.
 - Preserve ordinary double hyphens in Simple comment mode.
 - Neutralize only HTML comment delimiter sequences that would make the generated comment non-conforming.
 - Exercise Simple mode, its permissions, upgrade persistence and the output toggle in real WordPress/HTTP integration tests.
