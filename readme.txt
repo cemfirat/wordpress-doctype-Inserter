@@ -52,6 +52,7 @@ Clear page and CDN caches, check HTML minification, then use Check home page out
 == Changelog ==
 
 = 1.2.2 =
+* Fix the first switch from a legacy Advanced snippet to Simple comment mode.
 * Preserve ordinary double hyphens in Simple comment mode.
 * Neutralize only unsafe HTML comment delimiter sequences.
 * Add real WordPress and HTTP coverage for Simple mode and the output switch.
