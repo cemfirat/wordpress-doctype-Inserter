@@ -11,7 +11,8 @@ version = re.search(r'^ \* Version: (\d+\.\d+\.\d+)$', header, re.M).group(1)
 assert f"define( 'DOCTYPE_INSERTER_VERSION', '{version}' );" in header
 assert f'Stable tag: {version}\n' in (root / 'readme.txt').read_text()
 files = ['doctype-inserter.php', 'includes/class-doctype-inserter-output.php',
-         'includes/class-doctype-inserter-updater.php', 'readme.txt', 'README.md', 'CHANGELOG.md']
+         'includes/class-doctype-inserter-updater.php', 'readme.txt', 'README.md',
+         'CHANGELOG.md', 'LICENSE']
 archive = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else root / 'dist/doctype-inserter.zip')
 archive.parent.mkdir(parents=True, exist_ok=True)
 with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED) as out:
