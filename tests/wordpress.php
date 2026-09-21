@@ -18,11 +18,33 @@ doctype_inserter_register_settings();
 $snippet = '<!-- existing $1 \\1 -->';
 update_option( 'doctype_inserter_text', $snippet );
 di_assert( $snippet === get_option( 'doctype_inserter_text' ), 'A trusted administrator can save literal snippets.' );
+
+$comment = 'Hello -- developers -->';
+update_option( 'doctype_inserter_mode', 'comment' );
+update_option( 'doctype_inserter_comment', $comment );
+update_option( 'doctype_inserter_enabled', 1 );
+$comment_snippet = "<!--\nHello -- developers -- >\n-->";
+di_assert( 'comment' === get_option( 'doctype_inserter_mode' ), 'WordPress stores Simple comment mode.' );
+di_assert( $comment === get_option( 'doctype_inserter_comment' ), 'WordPress stores the simple comment text.' );
+di_assert( (bool) get_option( 'doctype_inserter_enabled' ), 'WordPress stores the enabled output switch.' );
+di_assert( 'comment' === doctype_inserter_get_mode(), 'The mode resolver selects Simple comment mode.' );
+di_assert( doctype_inserter_is_enabled(), 'The enabled resolver allows output.' );
+di_assert( $comment_snippet === doctype_inserter_comment_snippet( $comment ), 'Simple comment generation preserves valid double hyphens and neutralizes a closing delimiter.' );
+$active_snippet = doctype_inserter_get_active_snippet();
+if ( $comment_snippet !== $active_snippet ) {
+	throw new RuntimeException( 'Simple mode active output mismatch. Expected ' . var_export( $comment_snippet, true ) . ', got ' . var_export( $active_snippet, true ) );
+}
+WP_CLI::log( 'PASS: Simple mode returns the generated comment as active output.' );
+update_option( 'doctype_inserter_enabled', 0 );
+di_assert( '' === doctype_inserter_get_active_snippet(), 'The output switch disables insertion without deleting the message.' );
+update_option( 'doctype_inserter_enabled', 1 );
 $editor = wp_insert_user( array( 'user_login' => 'di_editor', 'user_pass' => wp_generate_password(), 'role' => 'editor' ) );
 di_assert( ! is_wp_error( $editor ), 'Create a restricted test user.' );
 wp_set_current_user( $editor );
 update_option( 'doctype_inserter_text', '<script>unauthorized</script>' );
-di_assert( $snippet === get_option( 'doctype_inserter_text' ), 'The real Settings API rejects unauthorized changes.' );
+di_assert( $snippet === get_option( 'doctype_inserter_text' ), 'The real Settings API rejects unauthorized advanced changes.' );
+update_option( 'doctype_inserter_comment', 'unauthorized comment' );
+di_assert( $comment === get_option( 'doctype_inserter_comment' ), 'The real Settings API rejects unauthorized simple-comment changes.' );
 wp_set_current_user( 1 );
 
 $release = array(
@@ -68,5 +90,8 @@ $result = $upgrader->bulk_upgrade( array( $basename ), array( 'clear_update_cach
 di_assert( is_array( $result ) && isset( $result[ $basename ] ) && is_array( $result[ $basename ] ), 'The real WordPress ZIP upgrader succeeds.' );
 di_assert( file_exists( WP_PLUGIN_DIR . '/' . $basename ), 'The existing plugin directory is preserved.' );
 di_assert( is_plugin_active( $basename ), 'The plugin remains active after a bulk update.' );
-di_assert( $snippet === get_option( 'doctype_inserter_text' ), 'The saved snippet survives an update.' );
+di_assert( $snippet === get_option( 'doctype_inserter_text' ), 'The saved advanced snippet survives an update.' );
+di_assert( $comment === get_option( 'doctype_inserter_comment' ), 'The saved simple comment survives an update.' );
+di_assert( 'comment' === get_option( 'doctype_inserter_mode' ), 'The selected mode survives an update.' );
+di_assert( (bool) get_option( 'doctype_inserter_enabled' ), 'The output switch survives an update.' );
 WP_CLI::success( 'WordPress integration checks passed on ' . get_bloginfo( 'version' ) . '.' );

@@ -103,7 +103,8 @@ foreach ( array( 204, 301, 302, 304 ) as $status ) {
 same( true, Doctype_Inserter_Output::is_html_response( array( 'Content-Type: text/html; charset=UTF-8' ), 404 ), 'Allow HTML error pages' );
 same( true, Doctype_Inserter_Output::is_html_response( array(), 200 ), 'Sniff the leading doctype when no content type is set' );
 
-same( "<!--\nHello - - developers\n-->", doctype_inserter_comment_snippet( 'Hello -- developers' ), 'Simple mode makes double hyphens comment-safe' );
+same( "<!--\nHello -- developers\n-->", doctype_inserter_comment_snippet( 'Hello -- developers' ), 'Simple mode preserves valid double hyphens' );
+same( "<!--\nA <!- - B -- > C -- !>\n-->", doctype_inserter_comment_snippet( 'A <!-- B --> C --!>' ), 'Simple mode neutralizes unsafe comment delimiter sequences' );
 same( '', doctype_inserter_comment_snippet( '' ), 'Empty simple message produces no comment' );
 same( 'advanced', doctype_inserter_get_mode(), 'Existing legacy snippet defaults to Advanced mode' );
 same( true, doctype_inserter_is_enabled(), 'Existing installations default to enabled' );

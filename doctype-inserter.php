@@ -3,7 +3,7 @@
  * Plugin Name: Doctype Inserter
  * Plugin URI: https://github.com/cemfirat/wordpress-doctype-Inserter
  * Description: Adds a simple source-code message or advanced snippet immediately after the HTML doctype.
- * Version: 1.2.1
+ * Version: 1.2.2
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: Cem Firat
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'DOCTYPE_INSERTER_VERSION', '1.2.1' );
+define( 'DOCTYPE_INSERTER_VERSION', '1.2.2' );
 define( 'DOCTYPE_INSERTER_FILE', __FILE__ );
 
 require_once __DIR__ . '/includes/class-doctype-inserter-output.php';
@@ -44,7 +44,6 @@ function doctype_inserter_register_settings() {
 		'doctype_inserter_enabled',
 		array(
 			'type'              => 'boolean',
-			'default'           => true,
 			'sanitize_callback' => 'doctype_inserter_validate_enabled',
 			'show_in_rest'      => false,
 		)
@@ -54,7 +53,6 @@ function doctype_inserter_register_settings() {
 		'doctype_inserter_mode',
 		array(
 			'type'              => 'string',
-			'default'           => 'comment',
 			'sanitize_callback' => 'doctype_inserter_validate_mode',
 			'show_in_rest'      => false,
 		)
@@ -136,8 +134,12 @@ function doctype_inserter_comment_snippet( $text ) {
 	if ( ! is_string( $text ) || '' === $text ) {
 		return '';
 	}
-	// HTML comments cannot contain a double hyphen. Keep the message readable.
-	$text = str_replace( '--', '- -', $text );
+	// Neutralize only delimiter sequences that are not allowed inside HTML comments.
+	$text = str_replace(
+		array( '<!--', '-->', '--!>' ),
+		array( '<!- -', '-- >', '-- !>' ),
+		$text
+	);
 	return "<!--\n" . $text . "\n-->";
 }
 
@@ -205,7 +207,7 @@ function doctype_inserter_settings_page() {
 					<th scope="row"><label for="doctype_inserter_comment">Message</label></th>
 					<td>
 						<textarea id="doctype_inserter_comment" name="doctype_inserter_comment" rows="7" class="large-text" placeholder="Hello, developers!"><?php echo esc_textarea( $comment ); ?></textarea>
-						<p class="description">Write normal text. Doctype Inserter wraps it in a safe HTML comment; double hyphens are made comment-safe automatically.</p>
+						<p class="description">Write normal text. Doctype Inserter wraps it in a safe HTML comment and neutralizes unsafe comment delimiter sequences automatically.</p>
 						<p>
 							<button type="button" class="button doctype-inserter-template" data-template="Website by Your Name — https://example.com">Website credits</button>
 							<button type="button" class="button doctype-inserter-template" data-template="We're hiring! See our open roles: https://example.com/jobs">We're hiring</button>
@@ -261,7 +263,7 @@ function doctype_inserter_settings_page() {
 		var modes = document.querySelectorAll('input[name="doctype_inserter_mode"]');
 
 		function safeComment(text) {
-			return text ? '<!--\n' + text.replace(/--/g, '- -') + '\n-->' : '';
+			return text ? '<!--\n' + text.replace(/<!--/g, '<!- -').replace(/--!>/g, '-- !>').replace(/-->/g, '-- >') + '\n-->' : '';
 		}
 		function currentMode() {
 			var selected = document.querySelector('input[name="doctype_inserter_mode"]:checked');
