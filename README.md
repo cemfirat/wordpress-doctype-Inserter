@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.svg" alt="Cem Firat logo" width="120" />
+</p>
+
 # Doctype Inserter
 
 A small, free WordPress plugin for personal messages in the page source. Add website credits, a developer greeting, a hiring note, or an advanced trusted snippet immediately after the HTML doctype.
