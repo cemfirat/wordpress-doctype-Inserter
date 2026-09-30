@@ -1,10 +1,8 @@
-name: WordPress Plugin Check pilot
+name: WordPress Plugin Check
 
 on:
   pull_request:
   push:
-    branches:
-      - main
 
 permissions:
   contents: read
@@ -32,17 +30,7 @@ jobs:
           unzip -q dist/doctype-inserter.zip -d "$BUILD_DIR"
           test -f "$BUILD_DIR/wordpress-doctype-Inserter/doctype-inserter.php"
 
-      - name: Run official WordPress Plugin Check
-        uses: WordPress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1.1.9
+      - name: Run distribution-aware WordPress Plugin Check
+        uses: cemfirat/repository-governance/blueprints/wordpress-plugin/plugin-check@161f21b0509419b73c451676893b578a7ef3db45
         with:
           build-dir: ${{ runner.temp }}/plugin-check-build/wordpress-doctype-Inserter
-          slug: doctype-inserter
-          # This plugin is distributed from GitHub, not the WordPress.org directory.
-          # Keep cross-distribution quality checks while excluding directory-only policy.
-          categories: |
-            general
-            security
-            performance
-            accessibility
-          include-experimental: 'false'
-          repo-token: ''
