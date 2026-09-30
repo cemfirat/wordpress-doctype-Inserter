@@ -5,7 +5,7 @@
   "blueprint_version": "0.2.0",
   "profile": "simple",
   "plugin": {
-    "slug": "wordpress-doctype-Inserter",
+    "slug": "doctype-inserter",
     "name": "Doctype Inserter",
     "main_file": "doctype-inserter.php",
     "version": "1.2.4",
